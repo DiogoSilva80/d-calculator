@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="pt-PT">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>D-Calculator — Calculadora Gráfica Online e Grátis</title>
+  <meta name="description" content="D-Calculator é uma calculadora gráfica online e grátis: cálculos científicos, gráficos de funções, tabelas, equações, sistemas, estatística, regressões e matrizes. Funciona no computador e no telemóvel.">
+  <meta name="keywords" content="calculadora gráfica, calculadora online, calculadora científica, gráficos de funções, equações, matrizes, estatística">
+  <link rel="canonical" href="https://diogosilva80.github.io/d-calculator/">
+  <meta name="theme-color" content="#1f2937">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+
+  <!-- pré-visualização ao partilhar o link (WhatsApp, Facebook, Instagram, X…) -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="D-Calculator">
+  <meta property="og:locale" content="pt_PT">
+  <meta property="og:title" content="D-Calculator — Calculadora Gráfica Online e Grátis">
+  <meta property="og:description" content="Cálculos, gráficos, tabelas, equações, estatística e matrizes no browser, grátis.">
+  <meta property="og:url" content="https://diogosilva80.github.io/d-calculator/">
+  <meta property="og:image" content="https://diogosilva80.github.io/d-calculator/og-image.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="D-Calculator, calculadora gráfica online">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <!-- dados estruturados para o Google -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "D-Calculator",
+    "url": "https://diogosilva80.github.io/d-calculator/",
+    "description": "Calculadora gráfica online e grátis: cálculos, gráficos, tabelas, equações, estatística e matrizes.",
+    "applicationCategory": "EducationalApplication",
+    "operatingSystem": "Qualquer (browser)",
+    "inLanguage": "pt-PT",
+    "offers": { "@type": "Offer", "price": "0", "priceCurrency": "EUR" }
+  }
+  </script>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <main class="device" aria-label="D-Calculator">
+    <div class="brand"><b>D<span>-</span>Calculator</b><small>Graphing · Color</small></div>
+    <div class="bezel">
+      <div class="screen" id="screen">
+        <div class="status" id="status"></div>
+        <div class="view" id="view"></div>
+        <div class="fbar" id="fbar"></div>
+        <div class="pop" id="pop"></div>
+      </div>
+    </div>
+    <div class="keys" id="keys"></div>
+  </main>
+
+  <section class="about">
+    <h1>D-Calculator — calculadora gráfica online</h1>
+    <p>Uma calculadora gráfica completa e grátis no teu browser. Faz cálculos científicos com frações, derivadas e integrais, desenha gráficos de funções e encontra raízes, máximos, mínimos e interseções. Também gera tabelas de valores, resolve equações polinomiais e sistemas lineares, calcula estatística e regressões e faz contas com matrizes. Funciona no computador e no telemóvel, sem instalar nada.</p>
+  </section>
+
+  <details class="help">
+    <summary>Ajuda e atalhos de teclado</summary>
+    <ul>
+      <li><b>MENU</b> (ou <kbd>Home</kbd>) volta ao menu principal; os números <b>1–7</b> abrem cada aplicação.</li>
+      <li><b>SHIFT</b> usa a função amarela por cima da tecla; <b>ALPHA</b> escreve a letra vermelha (variáveis A–Z). SHIFT+ALPHA bloqueia o ALPHA.</li>
+      <li>Teclado do computador: números, <kbd>+ - * / ^ ( ) ! ,</kbd>, letras, <kbd>Enter</kbd> = EXE, <kbd>Backspace</kbd> = DEL, <kbd>Delete</kbd> = AC, <kbd>Esc</kbd> = EXIT, setas e <kbd>F1</kbd>–<kbd>F6</kbd>.</li>
+      <li><b>F1–F6</b> correspondem aos separadores na parte de baixo do ecrã (também podes clicar neles).</li>
+      <li>Guardar numa variável: <code>5→A</code>. Derivada: <code>d/dx(x²,3)</code>. Integral: <code>∫(x²,0,3)</code>. Somatório: <code>Σ(x,1,10)</code>.</li>
+      <li>Nos gráficos podes arrastar com o rato para mover e usar a roda para fazer zoom.</li>
+    </ul>
+  </details>
+
+  <script src="js/mathcore.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app-run.js"></script>
+  <script src="js/app-stat.js"></script>
+  <script src="js/app-graph.js"></script>
+  <script src="js/app-equation.js"></script>
+  <script src="js/app-matrix.js"></script>
+  <script src="js/app-system.js"></script>
+  <script>D.start();</script>
+</body>
+</html>
