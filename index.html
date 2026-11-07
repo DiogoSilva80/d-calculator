@@ -3,7 +3,7 @@
 <head>
   <meta name="google-site-verification" content="form9j3o-IH4-mbtAVXTMf-rdsChUMOmamMjDkz81SY" />
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>D-Calculator — Calculadora Gráfica Online e Grátis</title>
   <meta name="description" content="D-Calculator é uma calculadora gráfica online e grátis: cálculos científicos, gráficos de funções, tabelas, equações, sistemas, estatística, regressões e matrizes. Funciona no computador e no telemóvel.">
   <meta name="keywords" content="calculadora gráfica, calculadora online, calculadora científica, gráficos de funções, equações, matrizes, estatística">
@@ -13,6 +13,12 @@
   <link rel="icon" href="icon-192.png" type="image/png" sizes="192x192">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
+  <!-- instalada no ecrã principal: abre em ecrã inteiro, sem barras do browser -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="D-Calculator">
+  <meta name="application-name" content="D-Calculator">
 
   <!-- pré-visualização ao partilhar o link (WhatsApp, Facebook, Instagram, X…) -->
   <meta property="og:type" content="website">
@@ -57,6 +63,15 @@
     <div class="keys" id="keys"></div>
   </main>
 
+  <section class="install" aria-labelledby="install-t">
+    <img src="icon-192.png" alt="" width="44" height="44">
+    <div>
+      <h2 id="install-t">Instalar como app, grátis</h2>
+      <p id="install-how">Abre este site no telemóvel. <b>iPhone:</b> no Safari, toca em Partilhar e depois em Adicionar ao ecrã principal. <b>Android:</b> no Chrome, menu ⋮ e depois Instalar app. Fica com ícone próprio, abre só a calculadora e funciona sem internet.</p>
+    </div>
+    <button type="button" id="install-btn" hidden>Instalar</button>
+  </section>
+
   <section class="about">
     <h1>D-Calculator — calculadora gráfica online</h1>
     <p>Uma calculadora gráfica completa e grátis no teu browser. Faz cálculos científicos com frações, derivadas e integrais, desenha gráficos de funções e encontra raízes, máximos, mínimos e interseções. Também gera tabelas de valores, resolve equações polinomiais e sistemas lineares, calcula estatística e regressões e faz contas com matrizes. Funciona no computador e no telemóvel, sem instalar nada.</p>
@@ -82,6 +97,7 @@
   <script src="js/app-equation.js"></script>
   <script src="js/app-matrix.js"></script>
   <script src="js/app-system.js"></script>
+  <script src="js/pwa.js"></script>
   <script>D.start();</script>
 </body>
 </html>

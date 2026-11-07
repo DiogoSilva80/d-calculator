@@ -396,6 +396,45 @@
     $screen.classList.toggle('off', D.off);
   };
 
+  /* ---------- modo app (instalado no ecrã principal): só a calculadora ---------- */
+  D.isApp = new URLSearchParams(location.search).has('app') || navigator.standalone === true ||
+    !!(window.matchMedia && ['standalone', 'fullscreen', 'minimal-ui'].some(m => matchMedia(`(display-mode: ${m})`).matches));
+  function fitDevice() {           // encolhe a calculadora se o ecrã for mais baixo do que ela
+    const dev = document.querySelector('.device');
+    dev.style.zoom = '';
+    const cs = getComputedStyle(document.body);
+    const avail = window.innerHeight - parseFloat(cs.paddingTop) - parseFloat(cs.paddingBottom);
+    if (dev.offsetHeight > avail) dev.style.zoom = String(avail / dev.offsetHeight);
+  }
+  function setupApp() {
+    document.documentElement.classList.add('app');
+    const vp = document.querySelector('meta[name="viewport"]');
+    if (vp) vp.content = 'width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover';
+    const tc = document.querySelector('meta[name="theme-color"]');
+    if (tc) tc.content = '#2a3646';          // barra do sistema da mesma cor que o topo da calculadora
+    fitDevice();
+    window.addEventListener('resize', fitDevice);
+
+    // botão "voltar" do Android = EXIT. Dentro de uma aplicação há sempre uma entrada extra no histórico,
+    // que o "voltar" consome; no menu principal não há, e o "voltar" fecha a app como é normal.
+    let guard = false, skip = false;
+    const sync = () => {
+      if (D.cur && !guard) { history.pushState({ dcalc: 1 }, ''); guard = true; }
+      else if (!D.cur && guard) { guard = false; skip = true; history.back(); }
+    };
+    const render = D.render;
+    D.render = () => { render(); sync(); };
+    window.addEventListener('popstate', () => {
+      if (skip) { skip = false; return; }
+      guard = false;
+      if (!D.cur) return;
+      const before = D.cur;
+      D.dispatch('#EXIT');
+      if (D.cur === before && before.id === 'run') { D.goMenu(); D.render(); }
+    });
+    sync();
+  }
+
   D.start = () => {
     D.load();
     $screen = document.getElementById('screen');
@@ -413,5 +452,6 @@
     });
     window.addEventListener('resize', () => D.render());
     D.render();
+    if (D.isApp) setupApp();
   };
 })();
