@@ -154,10 +154,10 @@
         case 'polyR': v.innerHTML = `<div class="ttl">${esc(polyTemplate(e.pn))}</div>` + rowsHTML(res.map((z, i) => ['x' + '₁₂₃₄₅₆'[i], cval(z)])); return;
         case 'solver':
           v.innerHTML = '<div class="ttl">Solver — escreve a equação em x (usa SHIFT + . para “=”)</div><div class="form">' +
-            `<div class="row${ssel === 0 ? ' sel' : ''}" data-i="0"><span>Eq:</span><span class="val">${ssel === 0 ? sEd.html() : esc(sEd.text)}</span></div>` +
+            `<div class="row${ssel === 0 ? ' sel' : ''}" data-i="0"><span>Eq:</span><span class="val">${ssel === 0 ? sEd.html() : D.tokHTML(sEd.t)}</span></div>` +
             `<div class="row${ssel === 1 ? ' sel' : ''}" data-i="1"><span>x inicial =</span><span class="val">${xEd ? xEd.html() : M.fmt(e.sx)}</span></div></div>`;
           return;
-        case 'solverR': v.innerHTML = `<div class="ttl">${esc(sEd.text)}</div>` + rowsHTML(res.map(([k, x]) => [k, M.fmtHTML(x)])); return;
+        case 'solverR': v.innerHTML = `<div class="ttl">${D.tokHTML(sEd.t)}</div>` + rowsHTML(res.map(([k, x]) => [k, M.fmtHTML(x)])); return;
       }
     },
     input(s) {

@@ -28,22 +28,100 @@
   };
 
   /* ---------- editor de expressões (por tokens, como numa calculadora) ---------- */
+  // modelo 2D do integral: [INT, corpo…, SEP, limite inferior…, SEP, limite superior…, END]
+  const INT = '\uE000', SEP = '\uE001', END = '\uE002';
+  const isMark = k => k === INT || k === SEP || k === END;
+  D.INT = INT;
+  D.tokText = t => t.map(k => (k === INT ? '∫(' : k === SEP ? ',' : k === END ? ')' : k)).join('');
+  function bounds(t, s) {             // índices dos 2 separadores e do fim do modelo que começa em s
+    const m = [];
+    let d = 0;
+    for (let i = s + 1; i < t.length; i++) {
+      const k = t[i];
+      if (k === INT) d++;
+      else if (d === 0 && (k === SEP || k === END)) { m.push(i); if (k === END) break; }
+      else if (k === END) d--;
+    }
+    return m;
+  }
+  function owner(t, i) {              // início do modelo a que pertence o marcador em i
+    let d = 0;
+    for (let j = i - 1; j >= 0; j--) {
+      if (t[j] === END) d++;
+      else if (t[j] === INT) { if (d === 0) return j; d--; }
+    }
+    return -1;
+  }
+  function locate(t, c) {             // modelo mais interior que contém o cursor, e em que caixa
+    const st = [];
+    for (let i = 0; i < c; i++) {
+      if (t[i] === INT) st.push({ s: i, slot: 0 });
+      else if (t[i] === SEP && st.length) st[st.length - 1].slot++;
+      else if (t[i] === END) st.pop();
+    }
+    return st.length ? st[st.length - 1] : null;
+  }
+  const CUR = '<span class="cur"></span>';
+  D.tokHTML = (t, cur = -1) => {
+    let i = 0;
+    function seq(inSlot) {
+      let h = '', n = 0;
+      while (i < t.length) {
+        const k = t[i];
+        if (inSlot && (k === SEP || k === END)) break;
+        if (i === cur) h += CUR;
+        if (k === INT) h += tpl(); else { h += esc(k); i++; }
+        n++;
+      }
+      if (i === cur) h += CUR;
+      return n || !inSlot ? h : '<span class="box">' + h + '</span>';
+    }
+    function tpl() {
+      i++;
+      const p = [];
+      for (let k = 0; k < 3; k++) {
+        p.push(seq(true));
+        const m = t[i];
+        if (m === SEP || m === END) i++;
+        if (m !== SEP) break;
+      }
+      while (p.length < 3) p.push('<span class="box"></span>');
+      return '<span class="tpl-int"><span class="i-s">∫</span><span class="i-lim"><span>' + p[2] + '</span><span>' + p[1] +
+        '</span></span><span class="i-b">' + p[0] + '</span><span class="i-dx">dx</span></span>';
+    }
+    return seq(false);
+  };
+
   class Editor {
     constructor(toks) { this.set(toks || []); }
     set(toks) { this.t = toks.slice(); this.c = this.t.length; }
-    ins(s) { this.t.splice(this.c, 0, s); this.c++; }
-    del() { if (this.c > 0) this.t.splice(--this.c, 1); else if (this.t.length) this.t.splice(0, 1); }
-    clear() { this.t = []; this.c = 0; }
-    get text() { return this.t.join(''); }
-    get empty() { return this.t.length === 0; }
-    html() {
-      let h = '';
-      for (let i = 0; i <= this.t.length; i++) {
-        if (i === this.c) h += '<span class="cur"></span>';
-        if (i < this.t.length) h += esc(this.t[i]);
-      }
-      return h;
+    ins(s) {
+      if (s === INT) { this.t.splice(this.c, 0, INT, SEP, SEP, END); this.c++; return; }
+      this.t.splice(this.c, 0, s);
+      this.c++;
     }
+    del() {
+      const t = this.t;
+      if (this.c === 0) { if (t.length && !isMark(t[0])) t.splice(0, 1); return; }
+      const k = t[this.c - 1];
+      if (!isMark(k)) { t.splice(--this.c, 1); return; }
+      const s = k === INT ? this.c - 1 : owner(t, this.c - 1), b = bounds(t, s);
+      if (b[0] === s + 1 && b[1] === s + 2 && b[2] === s + 3) { t.splice(s, 4); this.c = s; }   // modelo vazio: apaga-o
+      else this.c--;
+    }
+    vert(dir) {                       // ▲ limite superior, ▼ limite inferior (dentro de um integral)
+      const L = locate(this.t, this.c);
+      if (!L) return false;
+      const b = bounds(this.t, L.s);
+      if (b.length < 3) return true;
+      if (dir < 0 && L.slot !== 2) this.c = b[2];
+      else if (dir > 0 && L.slot !== 1) this.c = b[1];
+      return true;
+    }
+    clear() { this.t = []; this.c = 0; }
+    get text() { return D.tokText(this.t); }
+    get empty() { return this.t.length === 0; }
+    html() { return D.tokHTML(this.t, this.c); }
     key(c) {
       switch (c) {
         case 'LEFT': if (this.c > 0) this.c--; return true;

@@ -9,7 +9,7 @@
   const PAGES = [
     [['x!', '!'], ['nPr', 'nPr('], ['nCr', 'nCr('], ['Abs', 'Abs('], ['Ran#', 'Ran#'], ['▷']],
     [['sinh', 'sinh('], ['cosh', 'cosh('], ['tanh', 'tanh('], ['Int', 'Int('], ['Frac', 'Frac('], ['▷']],
-    [['d/dx', 'd/dx('], ['∫dx', '∫('], ['Σ', 'Σ('], ['MDC', 'gcd('], ['MMC', 'lcm('], ['▷']],
+    [['d/dx', 'd/dx('], ['∫dx', D.INT], ['Σ', 'Σ('], ['MDC', 'gcd('], ['MMC', 'lcm('], ['▷']],
     [['MOD', 'mod('], ['logab', 'log('], ['%', '%'], ['Intg', 'Intg('], ['LIMPAR', '#CLR'], ['▷']]
   ];
   const OPS = ['+', '−', '×', '÷', '^', '²', '⁻¹', '!', '→', '⌟', 'ˣ√(', '%'];
@@ -28,7 +28,7 @@
       if (!hist.length) return;
       toks = hist[hist.length - 1].toks;
     }
-    const text = toks.join('');
+    const text = D.tokText(toks);
     const v = M.evaluate(text);
     M.vars.Ans = v;
     hist.push({ toks: toks.slice(), v, frac: autoFrac(text, v) });
@@ -43,7 +43,7 @@
     fkeys: () => PAGES[page].map(p => p[0]),
     render(v) {
       let h = '<div class="run">';
-      for (const e of hist.slice(-25)) h += `<div class="h-in">${esc(e.toks.join(''))}</div><div class="h-out">${resHTML(e)}</div>`;
+      for (const e of hist.slice(-25)) h += `<div class="h-in">${D.tokHTML(e.toks)}</div><div class="h-out">${resHTML(e)}</div>`;
       h += `<div class="h-in">${ed.html()}</div></div>`;
       v.innerHTML = h;
       v.firstChild.scrollTop = v.firstChild.scrollHeight;
@@ -74,11 +74,13 @@
         }
         case 'AC': ed.clear(); just = false; rec = -1; return;
         case 'UP':
+          if (ed.vert(-1)) return;
           if (!hist.length) return;
           rec = rec < 0 ? hist.length - 1 : Math.max(0, rec - 1);
           ed.set(hist[rec].toks); just = false;
           return;
         case 'DOWN':
+          if (ed.vert(1)) return;
           if (rec < 0) return;
           rec++;
           if (rec >= hist.length) { rec = -1; ed.clear(); } else ed.set(hist[rec].toks);

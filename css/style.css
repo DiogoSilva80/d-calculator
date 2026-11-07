@@ -201,3 +201,12 @@ kbd { font: 11px ui-monospace, monospace; border: 1px solid var(--muted); border
 .about { width: min(440px, 100%); }
 .about h1 { font-size: 19px; margin: 4px 0 6px; }
 .about p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); }
+
+/* ---------- integral em formato natural ---------- */
+.tpl-int { display: inline-flex; align-items: center; vertical-align: middle; margin: 2px 1px; line-height: 1.2; }
+.i-s { font: italic 1.8em/1 "Times New Roman", Georgia, serif; margin-right: 1px; }
+.i-lim { display: inline-flex; flex-direction: column; justify-content: space-between; align-self: stretch; font-size: .72em; line-height: 1.15; margin-right: 4px; }
+.i-lim > span { display: block; min-height: 1.1em; white-space: nowrap; }
+.i-dx { margin-left: 3px; }
+.box { display: inline-block; position: relative; width: .62em; height: .9em; border: 1px solid currentColor; vertical-align: middle; margin: 0 1px; }
+.box .cur { position: absolute; left: 1px; top: 1px; height: calc(100% - 2px); margin: 0; }

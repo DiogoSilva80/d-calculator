@@ -90,7 +90,7 @@
       M.vars.Ans = v;
     }
     ans = v;
-    out = { expr: ed.text, v };
+    out = { expr: ed.t.slice(), v };
   }
 
   /* ---------- apresentação ---------- */
@@ -120,7 +120,7 @@
       if (mode === 'edit') { v.innerHTML = `<div class="ttl">Mat ${editing}</div>` + grid.html(); return; }
       let h = '<div class="scroll" style="padding:2px 6px">';
       if (out) {
-        h += `<div class="h-in">${esc(out.expr)}</div><div class="mres">${la.isM(out.v) ? matHTML(out.v) : '<div class="h-out">' + (fracOn && M.toFrac(out.v, 9999) && !Number.isInteger(out.v) ? M.fracHTML(M.toFrac(out.v, 9999)) : M.fmtHTML(out.v)) + '</div>'}</div>`;
+        h += `<div class="h-in">${D.tokHTML(out.expr)}</div><div class="mres">${la.isM(out.v) ? matHTML(out.v) : '<div class="h-out">' + (fracOn && M.toFrac(out.v, 9999) && !Number.isInteger(out.v) ? M.fracHTML(M.toFrac(out.v, 9999)) : M.fmtHTML(out.v)) + '</div>'}</div>`;
         if (la.isM(out.v)) h += '<div class="hint">Guardar: Ans→A, Ans→B ou Ans→C</div>';
       } else h += '<div class="hint">Ex.: A×B, A+B, det(A), A⁻¹, Trn(A), 2A, A², Ans→C</div>';
       v.innerHTML = h + `<div class="h-in">${ed.html()}</div></div>`;
@@ -178,7 +178,7 @@
       if (c === 'F6' || c === 'EXIT') { mode = 'list'; return; }
       if (c === 'EXE') { calc(); ed.clear(); return; }
       if (c === 'FD') { fracOn = !fracOn; return; }
-      if (c === 'UP' && out) { ed.set(Array.from(out.expr)); return; }
+      if (c === 'UP' && out) { ed.set(out.expr); return; }
       ed.key(c);
     }
   });

@@ -13,15 +13,15 @@
     funcs().forEach((f, i) => {
       if (!f.on || !f.t.length) return;
       let g;
-      try { g = M.compileStr(f.t.join('')); } catch (e) { return; }
+      try { g = M.compileStr(D.tokText(f.t)); } catch (e) { return; }
       out.push({
-        i, label: 'Y' + (i + 1), expr: f.t.join(''), color: COLORS[f.c % COLORS.length],
+        i, label: 'Y' + (i + 1), toks: f.t, color: COLORS[f.c % COLORS.length],
         fn: x => { const y = g({ x }); return typeof y === 'number' ? y : NaN; }
       });
     });
     return out;
   }
-  const lab = it => `<span style="color:${it.color}">${it.label}=${esc(it.expr)}</span>`;
+  const lab = it => `<span style="color:${it.color}">${it.label}=${D.tokHTML(it.toks)}</span>`;
 
   /* ---------- desenho (também usado pela Estatística) ---------- */
   D.plot = function (cv, w0, items, ex) {
@@ -89,7 +89,7 @@
     html() {
       return '<div class="flist">' + funcs().map((f, i) => {
         const on = f.on && f.t.length ? ' class="on"' : '';
-        const body = i === this.sel && this.ed ? this.ed.html() : esc(f.t.join(''));
+        const body = i === this.sel && this.ed ? this.ed.html() : D.tokHTML(f.t);
         return `<div class="fl${i === this.sel ? ' sel' : ''}" data-i="${i}"><span class="fn" style="--c:${COLORS[f.c % COLORS.length]}"><i${on}></i>Y${i + 1}=</span><span class="fe">${body}</span></div>`;
       }).join('') + '</div>';
     }
